@@ -394,6 +394,90 @@
       if(!available) this.limit.right = true;
     },
 
+    hourShifter: function(event, d, dx, dy) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      var i = $(event.target), v = parseInt(i.val(), 10);
+      i.focus();
+
+      if(this.options.militaryTime) {
+        if(dy > 0) {
+          v = (v < 23) ? v + 1 : 0;
+        }
+        else if(dy < 0) {
+          v = (v > 0) ? v - 1 : 23;
+        }
+      }
+      else {
+        var ampm = this.picker.find('.ampm');
+        if(dy > 0) {
+          if(v == 11) {
+            v = 12;
+            ampm.val(ampm.val() == 'AM' ? 'PM' : 'AM');
+          }
+          else if(v < 12) {
+            v++;
+          }
+          else {
+            v = 1;
+          }
+        }
+        else if (dy < 0) {
+          if(v == 12) {
+            v = 11;
+            ampm.val(ampm.val() == 'AM' ? 'PM' : 'AM');
+          }
+          else if(v > 1) {
+            v--;
+          }
+          else {
+            v = 12;
+          }
+        }
+      }
+
+      i.val(this.leadZero(v));
+    },
+
+    minuteShifter: function(event, d, dx, dy) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      var i = $(event.target), v = parseInt(i.val(), 10);
+      i.focus();
+      if(dy > 0) {
+        v = (v < 59) ? v + 1 : 0;
+      }
+      else if(dy < 0) {
+        v = (v > 0) ? v - 1 : 59;
+      }
+
+      i.val(this.leadZero(v));
+    },
+
+    ampmShifter: function(event, d, dx, dy) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      var i = $(event.target);
+      i.focus();
+
+      if(dy > 0 || dy < 0) {
+        i.val(i.val() == "AM" ? "PM" : "AM");
+      }
+    },
+
+    keyWrapper: function(f, event) {
+      dy = 0;
+      if(event.which == 38) {
+        dy = 1;
+      } else if (event.which = 40) {
+        dy = -1;
+      }
+      $.proxy(f, this)(event, null, null, dy);
+    },
+
     renderTime: function() {
       var container;
 
@@ -411,84 +495,22 @@
               this.leadZero(this.options.militaryTime ?
                 this.working_date.getHours() :
                   (this.working_date.getHours() > 12 ? this.working_date.getHours() - 12 :
-                    this.working_date.getHours())) + '"/>').mousewheel($.proxy(function(event, d, dx, dy) {
-        event.preventDefault();
-        event.stopPropagation();
-
-        var i = $(event.target), v = parseInt(i.val(), 10);
-        i.focus();
-
-        if(this.options.militaryTime) {
-          if(dy > 0) {
-            v = (v < 23) ? v + 1 : 0;
-          }
-          else if(dy < 0) {
-            v = (v > 0) ? v - 1 : 23;
-          }
-        }
-        else {
-          var ampm = this.picker.find('.ampm');
-          if(dy > 0) {
-            if(v == 11) {
-              v = 12;
-              ampm.val(ampm.val() == 'AM' ? 'PM' : 'AM');
-            }
-            else if(v < 12) {
-              v++;
-            }
-            else {
-              v = 1;
-            }
-          }
-          else if (dy < 0) {
-            if(v == 12) {
-              v = 11;
-              ampm.val(ampm.val() == 'AM' ? 'PM' : 'AM');
-            }
-            else if(v > 1) {
-              v--;
-            }
-            else {
-              v = 12;
-            }
-          }
-        }
-
-        i.val(this.leadZero(v));
-      }, this)));
+                    this.working_date.getHours())) + '"/>')
+        .on('keydown', $.proxy(this.keyWrapper, this, this.hourShifter))
+        .mousewheel($.proxy(this.hourShifter, this)));
 
       container.append($('<input type="text" class="minutes"' + (this.options.militaryTime ? ' style="left:110px"' : '') + ' maxlength="2" value="' +
-              this.leadZero(this.working_date.getMinutes()) + '"/>').mousewheel($.proxy(function(event, d, dx, dy) {
-        event.preventDefault();
-        event.stopPropagation();
-
-        var i = $(event.target), v = parseInt(i.val(), 10);
-        i.focus();
-        if(dy > 0) {
-          v = (v < 59) ? v + 1 : 0;
-        }
-        else if(dy < 0) {
-          v = (v > 0) ? v - 1 : 59;
-        }
-
-        i.val(this.leadZero(v));
-      }, this)));
+              this.leadZero(this.working_date.getMinutes()) + '"/>')
+        .on('keydown', $.proxy(this.keyWrapper, this, this.minuteShifter))
+        .mousewheel($.proxy(this.minuteShifter, this)));
 
       container.append($('<div class="separator"' + (this.options.militaryTime ? ' style="left:91px"' : '') + '>:</div>'));
 
       if(!this.options.militaryTime) {
         container.append($('<input type="text" class="ampm" maxlength="2" value="' +
-          (this.working_date.getHours() >= 12 ? "PM" : "AM") + '"/>').mousewheel($.proxy(function(event, d, dx, dy) {
-          event.preventDefault();
-          event.stopPropagation();
-
-          var i = $(event.target);
-          i.focus();
-
-          if(dy > 0 || dy < 0) {
-            i.val(i.val() == "AM" ? "PM" : "AM");
-          }
-        })));
+          (this.working_date.getHours() >= 12 ? "PM" : "AM") + '"/>')
+          .on('keydown', $.proxy(this.keyWrapper, this, this.ampmShifter))
+          .mousewheel($.proxy(this.ampmShifter)));
       }
 
       container.append($('<input type="submit" value="OK" class="ok"/>').click($.proxy(function(event) {
