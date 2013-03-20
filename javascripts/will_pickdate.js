@@ -744,6 +744,7 @@
           case 'i': f += this.leadZero(t.getMinutes()); break;
           case 's': f += this.leadZero(t.getSeconds()); break;
           case 'U': f += Math.floor(t.valueOf() / 1000); break;
+          case 'S': f += t.toISOString(); break;
           default:  f += format.charAt(i);
         }
       }
