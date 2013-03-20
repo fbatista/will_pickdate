@@ -42,14 +42,15 @@
       <section>
         <h3>Welcome to will_pickdate Demo.</h3>
 
-        <input type="datetime" id="cena" name="cena"/>
+        <input type="datetime" id="cena" name="cena" value="2013-02-20T16:19:11.654Z"/>
         <script>
           var i = document.createElement("input");
           i.setAttribute('type', 'datetime');
           if(i.type !== 'datetime') {
             $('#cena').will_pickdate({
               timePicker:true,
-              format: 'F d, Y @ h:ia'
+              format: 'F d, Y @ h:ia',
+              inputOutputFormat: 'S'
             });
           }
         </script>
@@ -57,14 +58,15 @@
 
       <h4>Source:</h4>
       <pre><code>
-        &lt;input type="datetime" id="cena" name="cena"/&gt;
+        &lt;input type="datetime" id="cena" name="cena" value="2013-02-20T16:19:11.654Z"/&gt;
         &lt;script&gt;
           var i = document.createElement("input");
           i.setAttribute('type', 'datetime');
           if(i.type !== 'datetime') {
             $('#cena').will_pickdate({
               timePicker:true,
-              format: 'F d, Y @ h:ia'
+              format: 'F d, Y @ h:ia',
+              inputOutputFormat: 'S'
             });
           }
         &lt;/script&gt;
