@@ -518,14 +518,14 @@
         
         var parsedHours = parseInt(this.picker.find('.hour').val(), 10);
         if(!this.options.militaryTime){
-      	    parsedHours = parsedHours === 12 ? 0 : parsedHours;
-      	}
+            parsedHours = parsedHours === 12 ? 0 : parsedHours;
+        }
         
         this.select($.extend(this.dateToObject(this.working_date),
           {
-      	    hours: parsedHours + (!this.options.militaryTime && this.picker.find('.ampm').val() == "PM" ? 12 : 0),
-      	    minutes: parseInt(this.picker.find('.minutes').val(), 10)
-      	  }));
+            hours: parsedHours + (!this.options.militaryTime && this.picker.find('.ampm').val() == "PM" ? 12 : 0),
+            minutes: parseInt(this.picker.find('.minutes').val(), 10)
+          }));
       }, this)));
     },
 
@@ -761,30 +761,31 @@
         c = format.charAt(i);
         switch(c) {
           case '\\': r = null; i++; break;
-          case 'y': r = '[0-9]{2}'; break;
-          case 'Y': r = '[0-9]{4}'; break;
-          case 'm': r = '0[1-9]|1[012]'; break;
-          case 'n': r = '[1-9]|1[012]'; break;
-          case 'M': r = '[A-Za-z]{'+this.options.monthShort+'}'; break;
-          case 'F': r = '[A-Za-z]+'; break;
-          case 'd': r = '0[1-9]|[12][0-9]|3[01]'; break;
-          case 'j': r = '[1-9]|[12][0-9]|3[01]'; break;
-          case 'D': r = '[A-Za-z]{'+this.options.dayShort+'}'; break;
-          case 'l': r = '[A-Za-z]+'; break;
+          case 'y': r = /^[0-9]{2}/; break;
+          case 'Y': r = /^[0-9]{4}/; break;
+          case 'm': r = /^0[1-9]|1[012]/; break;
+          case 'n': r = /^[1-9]|1[012]/; break;
+          case 'M': r = '^[A-Za-z]{'+this.options.monthShort+'}'; break;
+          case 'F': r = /[A-Za-z]+/; break;
+          case 'd': r = /^0[1-9]|[12][0-9]|3[01]/; break;
+          case 'j': r = /^[1-9]|[12][0-9]|3[01]/; break;
+          case 'D': r = '^[A-Za-z]{'+this.options.dayShort+'}'; break;
+          case 'l': r = /^[A-Za-z]+/; break;
           case 'G':
           case 'H':
           case 'g':
-          case 'h': r = '[0-9]{1,2}'; break;
-          case 'a': r = '(am|pm)'; break;
-          case 'A': r = '(AM|PM)'; break;
+          case 'h': r = /^[0-9]{1,2}/; break;
+          case 'a': r = /^(am|pm)/; break;
+          case 'A': r = /^(AM|PM)/; break;
           case 'i':
-          case 's': r = '[012345][0-9]'; break;
-          case 'U': r = '-?[0-9]+$'; break;
+          case 's': r = /^[012345][0-9]/; break;
+          case 'U': r = /^-?[0-9]+$/; break;
+          case 'S': r = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/; break;
           default:  r = null;
         }
 
         if (r) {
-          m = t.match('^'+r);
+          m = t.match(r);
           if (m) {
             a[c] = m[0];
             t = t.substring(a[c].length);
