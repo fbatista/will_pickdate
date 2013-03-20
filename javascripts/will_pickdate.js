@@ -785,7 +785,7 @@
         }
 
         if (r) {
-          m = t.match('^'+r);
+          m = t.match(r);
           if (m) {
             a[c] = m[0];
             t = t.substring(a[c].length);
