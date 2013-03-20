@@ -744,6 +744,7 @@
           case 'i': f += this.leadZero(t.getMinutes()); break;
           case 's': f += this.leadZero(t.getSeconds()); break;
           case 'U': f += Math.floor(t.valueOf() / 1000); break;
+          case 'S': f += t.toISOString(); break;
           default:  f += format.charAt(i);
         }
       }
@@ -814,7 +815,8 @@
           case 'h': if (a['a'] == 'pm' || a['A'] == 'PM') { d.setHours(v == 12 ? 0 : parseInt(v, 10) + 12); } else { d.setHours(v); } break;
           case 'i': d.setMinutes(v); break;
           case 's': d.setSeconds(v); break;
-          case 'U': d = new Date(parseInt(v, 10) * 1000);
+          case 'U': d = new Date(parseInt(v, 10) * 1000); break;
+          case 'S': d = new Date(v);
         }
       }
 
