@@ -518,14 +518,14 @@
         
         var parsedHours = parseInt(this.picker.find('.hour').val(), 10);
         if(!this.options.militaryTime){
-      	    parsedHours = parsedHours === 12 ? 0 : parsedHours;
-      	}
+            parsedHours = parsedHours === 12 ? 0 : parsedHours;
+        }
         
         this.select($.extend(this.dateToObject(this.working_date),
           {
-      	    hours: parsedHours + (!this.options.militaryTime && this.picker.find('.ampm').val() == "PM" ? 12 : 0),
-      	    minutes: parseInt(this.picker.find('.minutes').val(), 10)
-      	  }));
+            hours: parsedHours + (!this.options.militaryTime && this.picker.find('.ampm').val() == "PM" ? 12 : 0),
+            minutes: parseInt(this.picker.find('.minutes').val(), 10)
+          }));
       }, this)));
     },
 
@@ -815,7 +815,8 @@
           case 'h': if (a['a'] == 'pm' || a['A'] == 'PM') { d.setHours(v == 12 ? 0 : parseInt(v, 10) + 12); } else { d.setHours(v); } break;
           case 'i': d.setMinutes(v); break;
           case 's': d.setSeconds(v); break;
-          case 'U': d = new Date(parseInt(v, 10) * 1000);
+          case 'U': d = new Date(parseInt(v, 10) * 1000); break;
+          case 'S': d = new Date(v);
         }
       }
 
